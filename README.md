@@ -1,2 +1,2 @@
 # Youtube-CLI
-GUI Tool to download youtube videos or audio
+GUI Tool to download videos or audio format from youtube
