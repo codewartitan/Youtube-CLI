@@ -1,22 +1,19 @@
 import sys
 from pytube import YouTube
+
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QFileDialog
+
+# global OutputdirectoryName
 
 if __name__ == "__main__":
     app = QApplication([])
     w = QWidget()
     w.setWindowTitle("YouTube Download")
-    # First Group Inputs
     VideoUrl = QLabel(w)
     VideoUrl.setText('videoURL')
-    # VideoUrl.move(100, 40)
     InputText = QLineEdit(w)
-    # InputText.setFixedWidth(330)
-    # InputText.move(100, 60)
     DownloadButton = QPushButton(w)
     DownloadButton.setText('Download')
-    # CancelButton = QPushButton(w)
-    # CancelButton.setText('Cancel')
 
     # Second Group Inputs
     Outputlabel = QLabel(w)
@@ -27,7 +24,6 @@ if __name__ == "__main__":
 
     # First Group
     hbox = QHBoxLayout()
-    # hbox.addStretch(1)
     hbox.addWidget(VideoUrl)
     hbox.addWidget(InputText)
     hbox.addWidget(DownloadButton)
@@ -48,6 +44,13 @@ if __name__ == "__main__":
     w.setLayout(vbox)
 
 
+def OpenDirectory():
+    global OutputdirectoryName
+    OutputdirectoryName = QFileDialog().getExistingDirectory()
+    Outputinput.setText(OutputdirectoryName)
+    # print(OutputdirectoryName)
+
+
 def clickMethod():
     # print("You clicked PushButton")
     YouTubeURL = InputText.text()
@@ -63,21 +66,15 @@ def clickMethod():
         output.move(200, 300)
         output.show()
     else:
+        # print(OutputdirectoryName)
+        # # print("else")
         yt = YouTube(YouTubeURL)
         yt.register_on_progress_callback(show_progress_bar)
         yt = yt.streams.first()
-        # yt.download(DirPath)
-        yt.download('/Users/sameer/Downloads')
+        yt.download(OutputdirectoryName)
         output.setText('Download Completed')
         output.move(150, 150)
         output.show()
-
-
-def OpenDirectory():
-    DirPath = QFileDialog().getExistingDirectory()
-    Outputinput.setText(DirPath)
-
-    # print(DirPath)
 
 
 DownloadButton.clicked.connect(clickMethod)
