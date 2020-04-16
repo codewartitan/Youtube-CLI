@@ -1,6 +1,5 @@
 import sys
 from pytube import YouTube
-
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QFileDialog
 
 # global OutputdirectoryName
@@ -10,6 +9,7 @@ if __name__ == "__main__":
     w = QWidget()
     w.setWindowTitle("YouTube Download")
     VideoUrl = QLabel(w)
+    # output = QLabel(w)
     VideoUrl.setText('videoURL')
     InputText = QLineEdit(w)
     DownloadButton = QPushButton(w)
@@ -48,33 +48,40 @@ def OpenDirectory():
     global OutputdirectoryName
     OutputdirectoryName = QFileDialog().getExistingDirectory()
     Outputinput.setText(OutputdirectoryName)
-    # print(OutputdirectoryName)
-
+    
 
 def clickMethod():
-    # print("You clicked PushButton")
     YouTubeURL = InputText.text()
 
     def show_progress_bar(self, chunk, bytes_remaining):
         progress = round((1 - bytes_remaining / self.filesize) * 100, 2), '% done...'
         print(progress)
 
-    output = QLabel(w)
+    OutputError = QLabel(w)
     if YouTubeURL == '':
-        output.setText('Please Enter the Youtube URL')
-        output.setFixedWidth(330)
-        output.move(200, 300)
-        output.show()
+        OutputError.setText('Please Enter the Youtube URL')
+        OutputError.setStyleSheet("color:red;")
+        OutputError.setFixedWidth(330)
+        OutputError.move(200, 300)
+        OutputError.show()
     else:
-        # print(OutputdirectoryName)
-        # # print("else")
         yt = YouTube(YouTubeURL)
         yt.register_on_progress_callback(show_progress_bar)
         yt = yt.streams.first()
-        yt.download(OutputdirectoryName)
-        output.setText('Download Completed')
-        output.move(150, 150)
-        output.show()
+        Outputdirectory = Outputinput.text()
+        if Outputdirectory == '':
+            OutputError.setText('Select the Folder to download')
+            OutputError.setStyleSheet("color:red;")
+            OutputError.setFixedWidth(330)
+            OutputError.move(150, 250)
+            OutputError.show()
+        else:
+            yt.download(OutputdirectoryName)
+            OutputError.setText('Download Completed')
+            OutputError.setStyleSheet("color:Green;")
+            OutputError.setFixedWidth(330)
+            OutputError.move(150, 250)
+            OutputError.show()
 
 
 DownloadButton.clicked.connect(clickMethod)
